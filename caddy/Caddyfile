@@ -1,0 +1,4 @@
+wss.bot.retconsoft.com {
+	# Caddy auto-provisions/renews TLS for this hostname
+	reverse_proxy 127.0.0.1:8080
+}
