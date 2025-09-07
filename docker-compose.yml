@@ -1,15 +1,11 @@
-version: "3.9"
-
 services:
   caddy:
     image: caddy:2.8
     restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
+    ports: ["80:80", "443:443"]
     volumes:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./data:/data # cert storage (Let's Encrypt)
+      - ./data:/data
       - ./data/config:/config
     environment:
       - ACME_AGREE=true
@@ -19,10 +15,9 @@ services:
     container_name: exotel-ultravox-bridge
     restart: unless-stopped
     environment:
-      ULTRAVOX_API_KEY: "${ULTRAVOX_API_KEY}"
       ULTRAVOX_API_BASE: "https://api.ultravox.ai/api"
+      ULTRAVOX_API_KEY: "${ULTRAVOX_API_KEY}" # export this in your shell (don’t hardcode)
+      ULTRAVOX_MODEL: "fixie-ai/ultravox"
+      ULTRAVOX_VOICE: "Mark"
     expose:
-      - "8080" # reachable to caddy via service DNS (bridge:8080)
-
-# one default network is auto-created; service names become DNS records
-# (caddy can reach http://bridge:8080 over this network)
+      - "8080"
