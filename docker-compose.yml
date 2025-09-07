@@ -1,14 +1,15 @@
+version: "3.9"
 services:
   caddy:
     image: caddy:2.8
     restart: unless-stopped
-    ports: ["80:80", "443:443"]
+    ports:
+      - "80:80"
+      - "443:443"
     volumes:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
       - ./data:/data
       - ./data/config:/config
-    environment:
-      - ACME_AGREE=true
 
   bridge:
     build: ./bridge
@@ -16,8 +17,11 @@ services:
     restart: unless-stopped
     environment:
       ULTRAVOX_API_BASE: "https://api.ultravox.ai/api"
-      ULTRAVOX_API_KEY: "${ULTRAVOX_API_KEY}" # export this in your shell (don’t hardcode)
-      ULTRAVOX_MODEL: "fixie-ai/ultravox"
-      ULTRAVOX_VOICE: "Mark"
+      ULTRAVOX_API_KEY: "${ULTRAVOX_API_KEY}" # export this before compose up
+      ULTRAVOX_AGENT_ID: "2f671eb9-60c7-455a-9da6-2166f9721aa6" # <-- put your agent id here
+      # ULTRAVOX_MODEL: "fixie-ai/ultravox"              # optional; agent controls it anyway
+      # ULTRAVOX_VOICE: "Mark"                           # optional; agent controls it anyway
+      IN_SAMPLE_RATE: "8000"
+      OUT_SAMPLE_RATE: "8000"
     expose:
       - "8080"
